@@ -1,0 +1,7 @@
+ISO_PREFIX={{ nfs_client }}
+OUTPUT=ISO
+OUTPUT_URL=nfs://{{ nfs_server }}/{{ backup_path }}
+BACKUP=NETFS
+BACKUP_URL=nfs://{{ nfs_server }}/{{ backup_path }}
+BACKUP_PROG_EXCLUDE=("${BACKUP_PROG_EXCLUDE[@]}" '/media' '/var/tmp' '/var/crash')
+NETFS_KEEP_OLD_BACKUP_COPY=

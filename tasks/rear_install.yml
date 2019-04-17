@@ -1,0 +1,15 @@
+---
+- name: Install ReaR Package
+  hosts: vm
+  tasks:
+    - name: package install
+      yum:
+        name: rear
+        state: present
+      tags: client
+      
+    - name: check rear install
+      command: rear -V
+      register: rear_version
+    - debug: "ReaR installed"
+      when: rear_version.stdout_lines == 'Relax-and-Recover 2.4'

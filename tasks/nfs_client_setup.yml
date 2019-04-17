@@ -1,0 +1,19 @@
+---
+- hosts: nfs_clients
+  remote_user: stack
+  sudo: yes
+
+  tasks:
+    - name: Ensure NFS common is installed.
+      yum: 
+        name: nfs-common 
+        state: present
+      tags: clients
+
+    - name: Create mountable dir
+      file: path=/system_backup state=directory mode=777 owner=root group=root
+      tags: clients
+
+    - name: set mountpoints
+      mount: name=/system_backup src={{hostvars[groups['nfs_server'][0]]['ansible_eth0']['ipv4']['address']}}:/backups fstype=nfs opts=defaults,nobootwait dump=0 passno=2 state=mounted
+      tags: clients

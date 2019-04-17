@@ -1,0 +1,18 @@
+---
+- hosts: nfs_clients
+  remote_user: stack
+  sudo: yes
+  tasks:
+    - name: Backup client data
+      shell: rear -v mkbackup
+      register: mkbackup
+    - debug: msg="{{ mkbackup.stdout }}"
+    - debug: msg="{{ mkbackup.stderr }}"
+
+    - name: Verify file presents
+      stat:
+        path: {{ backup_path }}
+      register: mkbackup_status
+    - debug: msg="Found backup image."
+      when: mkbackup.stat.exists
+      
