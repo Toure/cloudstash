@@ -1,10 +1,13 @@
 ---
-- name: Install ReaR Package
+- name: Install ReaR Packages
   hosts: vm
   tasks:
     - name: package install
       yum:
-        name: rear
+        name: 
+          - rear
+          - syslinux
+          - genisoimage
         state: present
       tags: client
       
@@ -12,4 +15,4 @@
       command: rear -V
       register: rear_version
     - debug: "ReaR installed"
-      when: rear_version.stdout_lines == 'Relax-and-Recover 2.4'
+      when: '"Relax-and-Recover 2.4" in rear_version.stdout_lines'

@@ -4,11 +4,19 @@
   sudo: yes
 
   tasks:
-    - name: Ensure NFS common is installed.
+    - name: Ensure NFS client is installed.
       yum: 
-        name: nfs-common 
+        name: 
+          - nfs-common
+          - firewalld 
         state: present
       tags: clients
+
+    - name: Configure nfs client firewall port.
+      firewalld:
+       service: nfs
+       permanent: true
+       state: enabled
 
     - name: Create mountable dir
       file: path=/system_backup state=directory mode=777 owner=root group=root
