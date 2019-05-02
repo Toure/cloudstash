@@ -3,20 +3,15 @@ CloudStash
 
 A backup solution for your cloud platform.
 
-Requirements
-------------
+Rationale
+---------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The goal of this role is to provide a means of protecting the data and configuration of a deployed cloud platform. This role will be centered around RHEL7+, RHOS, and Openshift (future releases.)
 
-Role Variables
---------------
+Configuration
+-------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+First all project configurations will be located in the defaults directory where attributes such as ip addresses, directory pathes, and other system information can be configured.
 
 Example Playbook
 ----------------
@@ -30,7 +25,7 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-BSD
+Apache 2.0
 
 Author Information
 ------------------
