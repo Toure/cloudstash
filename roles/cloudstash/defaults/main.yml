@@ -1,0 +1,27 @@
+---
+# defaults file for cloudstash
+backup_file: 
+backup_dirs:
+  - /etc
+  - /var/lib/nova
+  - /var/lib/glance
+  - /var/lib/keystone
+  - /var/lib/cinder
+  - /var/lib/heat
+  - /var/lib/heat-config
+  - /var/lib/heat-cfntools
+  - /var/lib/rabbitmq
+  - /var/lib/neutron
+  - /var/lib/haproxy
+  - /var/lib/openvswitch
+  - /var/lib/redis
+  - /srv/node
+  - /usr/libexec/os-apply-config/
+  - /home/heat-admin
+  - /root
+backup_excludes:
+  - /var/lib/nova/instances
+  - /proc
+  - /sys
+  - /dev
+  - /run

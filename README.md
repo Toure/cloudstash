@@ -15,7 +15,17 @@ First all project configurations will be located in the defaults directory where
 
 Example Playbook
 ----------------
+To install packages and configure storage the following options should be used.
 
+$> ansible-playbook -i inventory --tags install cloudstash.yml
+
+To perform a backup on a group of servers use the following:
+
+$> ansible-playbook -i inventory --tags "backup, controller" cloudstash.yml
+
+To build a recovery image:
+
+$> ansible-playbook -i inventory --tags "recovery, controller" cloudstash.yml
 
 
 License
@@ -26,4 +36,4 @@ Apache 2.0
 Author Information
 ------------------
 
-Toure
+Toure Dunnon

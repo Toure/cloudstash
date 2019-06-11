@@ -1,0 +1,27 @@
+---
+# tasks file for cloudstash
+- name: Package install
+  roles:
+    - rear
+    - storage
+
+- name: Stop services.
+  include:
+    - service_manager.yml
+
+
+- name: Configure storage.
+
+
+- name: Create backup.
+
+
+- name: Create recovery images.
+
+
+- name: Create DB dump.
+
+
+- name: Verify backup.
+
+

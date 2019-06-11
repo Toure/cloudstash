@@ -1,0 +1,7 @@
+---
+- name: Cloudstash launcher
+  include_vars:
+    - group_vars
+    - host_vars
+  roles:
+    - roles/cloudstash

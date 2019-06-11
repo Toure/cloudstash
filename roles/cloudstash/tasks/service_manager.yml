@@ -1,0 +1,56 @@
+---
+- name: Service Management Stop.
+  hosts: controller_nodes
+  remote_user: heat-admin    
+  serial: 1
+  tasks:
+    - name: stop controller services
+      service: name={{item}} state=stopped
+      with_items:
+        - keystone
+        - nova-conductor
+        - nova-api
+        - nova-cert
+        - nova-consoleauth
+        - nova-scheduler
+        - nova-novncproxy
+        - glance-registry
+        - glance-api
+  tags:
+   - backup 
+   - recovery
+
+- name: Service Management Start.
+  hosts: controller_nodes
+  remote_user: heat-admin
+  serial: 1
+  tasks:
+    - name: start controller services.
+      service: name={{ items }} state=started
+      with_items:
+        - keystone
+        - nova-conductor
+
+- name: Gather service list
+  shell: "systemctl list-unit-files --state=enabled --type=service | awk '/^{{ service_name }}.* enabled$/ {print $1}'"
+  args:
+    executable: "/bin/bash"
+  register: _enabled_services
+  changed_when: false
+  tags:
+    - skip_ansible_lint
+
+- name: Execute service action
+  service:
+    name: "{{ service_file }}"
+    state: "{{ service_action }}"
+  with_items: "{{ (_enabled_services.stdout_lines | difference(service_negate | default([]))) | list }}"
+  loop_control:
+    loop_var: service_file
+
+- name: Disable the service restart requirement
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: "{{ service_fact | default(service_name) }}"
+    option: need_service_restart
+value: False
