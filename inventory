@@ -1,2 +1,15 @@
-localhost
+[controller_nodes]
+172.16.1.1
+172.16.1.2
 
+[undercloud_nodes]
+172.16.1.1
+172.16.1.2
+
+[hypervisor_nodes]
+172.16.1.1
+172.16.1.2
+
+[nfs_servers]
+172.16.1.1
+172.16.1.2

@@ -1,7 +1,7 @@
 ---
-- name: Cloudstash launcher
-  include_vars:
-    - group_vars
-    - host_vars
+- hosts: {{ nodes }}
   roles:
-    - roles/cloudstash
+    - {role: 'rear', tags: 'backup'}
+    - {role: 'rear', tags: 'install'}
+    - {role: 'rear', tags: 'recovery'}
+
