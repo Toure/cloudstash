@@ -1,7 +1,6 @@
 ---
 # Task responsible for configuring nfs clients.
 - hosts: nfs_clients
-  remote_user: stack
   sudo: yes
 
   tasks:

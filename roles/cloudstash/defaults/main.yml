@@ -25,3 +25,7 @@ backup_excludes:
   - /sys
   - /dev
   - /run
+service_name:
+  - keystone
+  - glance
+  - hea

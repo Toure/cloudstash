@@ -1,6 +1,7 @@
 ---
 # tasks file for database
 - name: MySQL service database backup.
+  host: overcloud_nodes
   vars:
     - exclude_db:
       - "mysql"
@@ -11,14 +12,10 @@
       when: mysql_password is undefined
       register: mysql_password
       become: true
-      tags:
-       - overcloud_nodes
       
     - name: Get all database names.
       shell: 'mysql -u root -p{{ mysql_password }} -e "show databases;" '
       register: dblist
-      tags:
-        - overcloud_nodes
 
     - name: Create database backup.
       mysql_db:
@@ -28,36 +25,38 @@
         login_user: root
         login_password: "{{ mysql_password }}"
       with_items: "{{ dblist.stdout_lines | difference(exclude_db) }}"
-      tags:
-        - overcloud_nodes
 
-- name: Get the Redis masterauth password
-  shell: |
-    /bin/hiera -c /etc/puppet/hiera.yaml redis::masterauth
-  when: redis_masterauth_password is undefined
-  register: redis_masterauth_password_cmd_output
-  become: true
-  no_log: true
+- name: Redis database backup.
+  host: overcloud_nodes
+  
+  tasks:
+    - name: Get the Redis masterauth password
+      shell: |
+        /bin/hiera -c /etc/puppet/hiera.yaml redis::masterauth
+      when: redis_masterauth_password is undefined
+      register: redis_masterauth_password_cmd_output
+      become: true
+      no_log: true
 
-- name: Get the Redis VIP
-  shell: |
-    /bin/hiera -c /etc/puppet/hiera.yaml redis_vip
-  when: redis_vip is undefined
-  register: redis_vip_cmd_output
-  become: true
+    - name: Get the Redis VIP
+      shell: |
+        /bin/hiera -c /etc/puppet/hiera.yaml redis_vip
+      when: redis_vip is undefined
+      register: redis_vip_cmd_output
+      become: true
 
-- name: Convert the Redis VIP if unknown
-  set_fact:
-    redis_vip: "{{ redis_vip_cmd_output.stdout_lines[0] }}"
-  when: redis_vip is undefined
+    - name: Convert the Redis VIP if unknown
+      set_fact:
+        redis_vip: "{{ redis_vip_cmd_output.stdout_lines[0] }}"
+      when: redis_vip is undefined
 
-- name: Run the redis backup command
-  command: /bin/redis-cli -h {{ redis_vip }} -a {{ redis_masterauth_password }} save
-  no_log: true
+    - name: Run the redis backup command
+      command: /bin/redis-cli -h {{ redis_vip }} -a {{ redis_masterauth_password }} save
+      no_log: true
 
-- name: Copy the Redis dump
-  copy:
-    src: /var/lib/redis/dump.rdb
-    dest: "{{ backup_tmp_dir }}/redis/dump.rdb"
-    remote_src: yes
-  become: true
+    - name: Copy the Redis dump
+      copy:
+        src: /var/lib/redis/dump.rdb
+        dest: "{{ backup_tmp_dir }}/redis/dump.rdb"
+        remote_src: yes
+      become: true

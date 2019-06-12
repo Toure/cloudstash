@@ -1,7 +1,6 @@
 ---
 - name: Rescue image creation.
   hosts: nfs_clients
-  remote_user: heat-admin
   sudo: yes
   tasks:
     - name: Create rescue image.

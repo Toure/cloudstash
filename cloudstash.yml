@@ -3,5 +3,5 @@
   roles:
     - {role: 'rear', tags: 'backup'}
     - {role: 'rear', tags: 'install'}
-    - {role: 'rear', tags: 'recovery'}
+    - {role: 'rear', tags: 'rescue'}
 

@@ -3,7 +3,6 @@
   hosts: 
   - controllers
   - undercloud
-  remote_user: heat-admin
   sudo: yes
   tasks:
     - name: Backup client data
@@ -18,5 +17,3 @@
       register: mkbackup_status
     - debug: msg="Found backup image."
       when: mkbackup.stat.exists
-
-    - name: Checksum   
