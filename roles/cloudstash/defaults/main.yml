@@ -28,4 +28,4 @@ backup_excludes:
 service_name:
   - keystone
   - glance
-  - hea
+  - heat
