@@ -1,25 +1,21 @@
 ---
-- hosts: all
-  tasks:
-    - import_playbook: service_manager.yml
-    - import_role: rear
-    - import_role: storage
+- name: Service service_manager.yml
+  import_playbook: service_manager.yml
 
-    - name: Install ReaR packages.
-      import_role:
-        name: rear
-        tasks_from: rear_install
-        tags: install
+- name: Install ReaR packages.
+  import_role:
+    name: rear
+    tasks_from: rear_install
+    tags: install
 
-    - name: Backup node.
-      import_role:
-        name: rear
-        tasks_from: rear_backup
-        tags: backup
+- name: Backup node.
+  import_role:
+    name: rear
+    tasks_from: rear_backup
+    tags: backup
 
-    - name: Create rescue image.
-      import_role:
-        name: rear
-        task_from: rear_rescue
-        tags: rescue
-    
+- name: Create rescue image.
+  import_role:
+    name: rear
+    task_from: rear_rescue
+    tags: rescue
