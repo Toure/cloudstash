@@ -15,8 +15,14 @@
     - name: check rear install
       command: rear -V
       register: rear_version
+    - debug: "ReaR installed"
+      when: '"Relax-and-Recover 2.4" in rear_version.stdout_lines'
       tags: 
         - client
 
-    - debug: "ReaR installed"
-      when: '"Relax-and-Recover 2.4" in rear_version.stdout_lines'
+    - name: copy rear local config
+      template: src=local.conf.j2 dest=/etc/rear/local.conf owner=root group=root
+      tags:
+        - client
+
+    

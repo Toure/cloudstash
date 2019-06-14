@@ -1,2 +1,7 @@
 ---
 # tasks file for rear
+- include_tasks: rear_backup.yml
+  when: backup is defined
+
+- include_tasks: rear_rescue.yml
+  when: rescue is defined

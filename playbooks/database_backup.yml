@@ -1,0 +1,7 @@
+---
+- name: Backup databases on controller nodes.
+  hosts: controller_nodes
+  gather_facts: true
+  roles:
+    - database
+  

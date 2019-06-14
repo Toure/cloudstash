@@ -1,0 +1,31 @@
+---
+
+- name: Install ReaR packages
+  hosts:
+    - controller_nodes
+    - undercloud_nodes
+  gather_facts: true
+  tags:
+    - install
+  roles:
+    - rear/setup
+
+- name: NFS Server setup.
+  hosts: nfs_servers
+  gather_facts: true
+  tags:
+    - server
+  roles:
+    - storage
+
+- name: NFS Client setup.
+  hosts: 
+    - controller_nodes
+    - undercloud_nodes
+  gather_facts: true
+  tags:
+    - client
+  roles:
+    - storage
+
+- import_playbook: system_backup.yml 

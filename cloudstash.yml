@@ -1,7 +1,0 @@
----
-- hosts: all
-  roles:
-    - {role: 'rear', tags: 'backup'}
-    - {role: 'rear', tags: 'install'}
-    - {role: 'rear', tags: 'rescue'}
-

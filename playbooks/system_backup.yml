@@ -1,0 +1,11 @@
+---
+# This play will stop all services then perform the backup.
+- name: System Backup and service management.
+  hosts: controller_nodes
+  gather_facts: true
+  tags:
+    - service_restart
+    - backup
+  roles:
+    - service_manager
+    - rear
