@@ -17,15 +17,15 @@ Example Playbook
 ----------------
 To install packages and configure storage the following options should be used.
 
-$> ansible-playbook -i inventory --tags install cloudstash.yml
+$> ansible-playbook -i inventory --tags install playbooks/cloudstash.yml
 
 To perform a backup on a group of servers use the following:
 
-$> ansible-playbook -i inventory --tags "backup, controller" cloudstash.yml
+$> ansible-playbook -i inventory --tags backup playbooks/cloudstash.yml
 
 To build a rescue image:
 
-$> ansible-playbook -i inventory --tags "rescue, controller" cloudstash.yml
+$> ansible-playbook -i inventory --tags rescue playbooks/cloudstash.yml
 
 
 License
