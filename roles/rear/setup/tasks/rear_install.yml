@@ -24,5 +24,3 @@
       template: src=local.conf.j2 dest=/etc/rear/local.conf owner=root group=root
       tags:
         - client
-
-    
