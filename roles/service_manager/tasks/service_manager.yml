@@ -40,15 +40,17 @@
 
     - name: Stop Service Container
       docker_container: 
-        name: "{{ service_container_name }}"
+        name: "{{ items }}"
         state: stopped
+      with_items: "{{ container_services.stdout_lines }} "
       tags:
         - stop_container_services
       
     - name: Start Service Container
       docker_container: 
-        name: "{{ service_container_name }}"
+        name: "{{ items }}"
         state: started
+        with_items: " {{ container_services.stdout_lines }} "
       tags:
         - start_container_services
 
