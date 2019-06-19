@@ -1,33 +1,29 @@
 ---
 # Tasks responsible for configuring the nfs server.
-- hosts: nfs_servers
-  become: yes
+- name: Create mountable dir
+  file: path=/backups state=directory mode=777 owner=root group=root
+  tags: server
 
-  tasks:
-    - name: Create mountable dir
-      file: path=/backups state=directory mode=777 owner=root group=root
-      tags: server
+- name: make sure the mount drive has a filesystem
+  filesystem: fstype=ext4 dev={{ mountable_share_drive | default('/dev/xvdb') }}
+  tags: server
 
-    - name: make sure the mount drive has a filesystem
-      filesystem: fstype=ext4 dev={{ mountable_share_drive | default('/dev/xvdb') }}
-      tags: server
+- name: set mountpoints
+  mount: name=/backups src={{ mountable_share_drive | default('/dev/xvdb') }} fstype=auto opts=defaults,nobootwait dump=0 passno=2 state=mounted
+  tags: server
 
-    - name: set mountpoints
-      mount: name=/backups src={{ mountable_share_drive | default('/dev/xvdb') }} fstype=auto opts=defaults,nobootwait dump=0 passno=2 state=mounted
-      tags: server
+- name: Ensure NFS utilities are installed.
+  yum: 
+    name:
+    - nfs-common
+    - nfs-kernel-server
+    state: present
+  tags: server
 
-    - name: Ensure NFS utilities are installed.
-      yum: 
-        name:
-        - nfs-common
-        - nfs-kernel-server
-        state: present
-      tags: server
+- name: copy /etc/exports
+  template: src=exports.j2 dest=/etc/exports owner=root group=root
+  tags: server
 
-    - name: copy /etc/exports
-      template: src=exports.j2 dest=/etc/exports owner=root group=root
-      tags: server
-
-    - name: restart nfs server
-      service: name=nfs-kernel-server state=restarted
-      tags: server
+- name: restart nfs server
+  service: name=nfs-kernel-server state=restarted
+  tags: server

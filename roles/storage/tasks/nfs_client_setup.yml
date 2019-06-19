@@ -1,27 +1,23 @@
 ---
 # Task responsible for configuring nfs clients.
-- hosts: nfs_clients
-  become: true
+- name: Ensure NFS client is installed.
+  yum: 
+    name: 
+      - nfs-common
+      - firewalld 
+    state: present
+  tags: clients
 
-  tasks:
-    - name: Ensure NFS client is installed.
-      yum: 
-        name: 
-          - nfs-common
-          - firewalld 
-        state: present
-      tags: clients
+- name: Configure nfs client firewall port.
+  firewalld:
+    service: nfs
+    permanent: true
+    state: enabled
 
-    - name: Configure nfs client firewall port.
-      firewalld:
-       service: nfs
-       permanent: true
-       state: enabled
+- name: Create mountable dir
+  file: path=/system_backup state=directory mode=777 owner=root group=root
+  tags: clients
 
-    - name: Create mountable dir
-      file: path=/system_backup state=directory mode=777 owner=root group=root
-      tags: clients
-
-    - name: set mountpoints
-      mount: name=/system_backup src={{hostvars[groups['nfs_server'][0]]['ansible_eth0']['ipv4']['address']}}:/backups fstype=nfs opts=defaults,nobootwait dump=0 passno=2 state=mounted
-      tags: clients
+- name: set mountpoints
+  mount: name=/system_backup src={{hostvars[groups['nfs_server'][0]]['ansible_eth0']['ipv4']['address']}}:/backups fstype=nfs opts=defaults,nobootwait dump=0 passno=2 state=mounted
+  tags: clients

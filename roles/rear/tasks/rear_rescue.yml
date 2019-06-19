@@ -1,17 +1,13 @@
 ---
-- name: Rescue image creation.
-  hosts: nfs_clients
-  sudo: yes
-  tasks:
-    - name: Create rescue image.
-      shell: rear -v mkrescue
-      register: mkrescue
-    - debug: msg="{{ mkrescue.stdout }}"
-    - debug: msg="{{ mkrescue.stderr }}"
+- name: Create rescue image.
+  shell: rear -v mkrescue
+  register: mkrescue
+- debug: msg="{{ mkrescue.stdout }}"
+- debug: msg="{{ mkrescue.stderr }}"
 
-    - name: Verify file presents
-      stat:
-        path: {{ backup_path }}
-      register: mkrescue_status
-    - debug: msg="Rescue image found."
-      when: mkrescue.stat.exists
+- name: Verify file presents
+  stat:
+    path: {{ backup_path }}
+  register: mkrescue_status
+- debug: msg="Rescue image found."
+  when: mkrescue.stat.exists

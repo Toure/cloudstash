@@ -1,5 +1,4 @@
 ---
-
 - name: Install ReaR packages
   hosts:
     - controller_nodes
