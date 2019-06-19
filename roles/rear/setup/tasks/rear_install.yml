@@ -1,6 +1,7 @@
 ---
 - name: Install ReaR Packages
   hosts: endpoint_nodes
+  become: yes
   tasks:
     - name: package install
       yum:

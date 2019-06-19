@@ -1,7 +1,7 @@
 ---
 # Task responsible for configuring nfs clients.
 - hosts: nfs_clients
-  sudo: yes
+  become: true
 
   tasks:
     - name: Ensure NFS client is installed.

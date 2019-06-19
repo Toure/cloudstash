@@ -1,7 +1,7 @@
 ---
 # Tasks responsible for configuring the nfs server.
 - hosts: nfs_servers
-  sudo: yes
+  become: yes
 
   tasks:
     - name: Create mountable dir
