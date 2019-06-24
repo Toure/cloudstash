@@ -1,3 +1,3 @@
 ---
 - include_tasks: rear_install.yml
-  when: install is defined
+  when: run_install is defined

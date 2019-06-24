@@ -1,5 +1,10 @@
 ---
+- name: Set install var
+  set_fact:
+    rear_install: true
+    
 - name: package install
+  become: yes
   yum:
     name: 
       - rear
@@ -7,7 +12,7 @@
       - genisoimage
     state: present
   tags: 
-    - client
+    - install
   
 - name: check rear install
   command: rear -V
@@ -15,9 +20,9 @@
 - debug: "ReaR installed"
   when: '"Relax-and-Recover 2.4" in rear_version.stdout_lines'
   tags: 
-    - client
+    - install
 
 - name: copy rear local config
   template: src=local.conf.j2 dest=/etc/rear/local.conf owner=root group=root
   tags:
-    - client
+    - install

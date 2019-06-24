@@ -4,6 +4,7 @@
   register: mkbackup
 - debug: msg="{{ mkbackup.stdout }}"
 - debug: msg="{{ mkbackup.stderr }}"
+  tags: backup
 
 - name: Verify file presents
   stat:
@@ -11,3 +12,4 @@
   register: mkbackup_status
 - debug: msg="Found backup image."
   when: mkbackup.stat.exists
+  tags: backup

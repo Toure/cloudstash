@@ -4,6 +4,7 @@
   register: mkrescue
 - debug: msg="{{ mkrescue.stdout }}"
 - debug: msg="{{ mkrescue.stderr }}"
+  tags: rescue
 
 - name: Verify file presents
   stat:
@@ -11,3 +12,4 @@
   register: mkrescue_status
 - debug: msg="Rescue image found."
   when: mkrescue.stat.exists
+  tags: rescue
