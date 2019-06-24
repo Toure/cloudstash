@@ -11,15 +11,10 @@
     - install
   
 - name: check rear install
-  shell: rear -V
+  command: /usr/sbin/rear -V
   register: rear_version
   tags:
     - install
-- debug: "ReaR installed"
-  when: '"Relax-and-Recover 2.4" in rear_version.stdout_lines'
-  tags: 
-    - install
-    - verbose
 
 - name: copy rear local config
   template: src=local.conf.j2 dest=/etc/rear/local.conf owner=root group=root

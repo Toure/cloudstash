@@ -2,14 +2,19 @@
 - name: Create rescue image.
   shell: rear -v mkrescue
   register: mkrescue
+  tags:
+    - rescue
+
 - debug: msg="{{ mkrescue.stdout }}"
 - debug: msg="{{ mkrescue.stderr }}"
-  tags: rescue
+
 
 - name: Verify file presents
   stat:
     path: {{ backup_path }}
   register: mkrescue_status
+  tags:
+    - rescue
+
 - debug: msg="Rescue image found."
   when: mkrescue.stat.exists
-  tags: rescue
