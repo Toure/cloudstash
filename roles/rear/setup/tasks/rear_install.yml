@@ -1,8 +1,4 @@
----
-- name: Set install var
-  set_fact:
-    rear_install: true
-    
+---  
 - name: package install
   become: yes
   yum:
