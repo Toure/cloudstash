@@ -11,7 +11,7 @@
 
 - name: Verify file presents
   stat:
-    path: {{ backup_path }}
+    path: {{ backup_mountpoint }}
   register: mkrescue_status
   tags:
     - rescue
