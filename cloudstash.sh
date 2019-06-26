@@ -12,15 +12,12 @@ exec &> >(tee -i -a _cloudstash.log )
 # or even ansible modules
 LANG=C
 
-DEFAULT_OPT_TAGS=""
-
-
-: ${OPT_INSTALL:=0}
-: ${OPT_CLEAN:=0}
-: ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
-: ${OPT_TEARDOWN:=nodes}
+: ${OPT_INSTALL:=""}
+: ${OPT_BACKUP:=""}
+: ${OPT_RESCUE:""}
+: ${OPT_TAGS:=""}
+: ${OPT_SKIP_TAGS:=""}
 : ${OPT_LIST_TASKS_ONLY=""}
-: ${USER_OVERRIDE_SUDO_CHECK:=0}
 
 print_logo () {
 
