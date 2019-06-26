@@ -17,6 +17,7 @@
     - install
 
 - name: copy rear local config
+  become: yes
   template: src=local.conf.j2 dest=/etc/rear/local.conf owner=root group=root
   tags:
     - install

@@ -21,6 +21,7 @@
   tags: server
 
 - name: copy /etc/exports
+  become: yes
   template: src=exports.j2 dest=/etc/exports owner=root group=root
   tags: server
 
