@@ -1,6 +1,6 @@
 ---
 - name: Backup client data
-  shell: rear -v mkbackup
+  shell: rear -d -v mkbackup
   register: mkbackup
 - debug: msg="{{ mkbackup.stdout }}"
 - debug: msg="{{ mkbackup.stderr }}"
@@ -8,7 +8,7 @@
 
 - name: Verify file presents
   stat:
-    path: {{ backup_path }}
+    path: {{ backup_mountpoint }}
   register: mkbackup_status
 - debug: msg="Found backup image."
   when: mkbackup.stat.exists

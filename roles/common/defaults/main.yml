@@ -1,7 +1,0 @@
-##
-#Default behaviors
-rear_install: true
-rear_backup: false
-backup_database: false
-configure_storage: false
-service_restart: false

@@ -1,6 +1,9 @@
 ---
-# defaults file for cloudstash
+backup_mountpoint: /system_backups
+
 backup_file: 
+
+# Directory pathes for controller.
 backup_dirs:
   - /etc
   - /var/lib/nova
@@ -25,7 +28,8 @@ backup_excludes:
   - /sys
   - /dev
   - /run
-service_name:
-  - keystone
-  - glance
-  - heat
+ 
+nfs_client:
+  - controller_nodes
+nfs_server:
+  - undercloud

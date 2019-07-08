@@ -1,4 +1,3 @@
 ---
 
 - include_tasks: service_manager.yml
-  when: service_restart is defined

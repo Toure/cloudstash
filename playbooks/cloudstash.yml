@@ -2,7 +2,7 @@
 - name: Install ReaR packages
   hosts:
     - controller_nodes
-    - undercloud_nodes
+    - undercloud
   gather_facts: true
   tags:
     - install
@@ -20,7 +20,7 @@
 - name: NFS Client setup.
   hosts: 
     - controller_nodes
-    - undercloud_nodes
+    - undercloud
   gather_facts: true
   tags:
     - client

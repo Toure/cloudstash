@@ -1,7 +1,7 @@
 ---
 # Tasks responsible for configuring the nfs server.
 - name: Create mountable dir
-  file: path=/backups state=directory mode=777 owner=root group=root
+  file: path={{ backup_mountpoint }} state=directory mode=777 owner=root group=root
   tags: server
 
 - name: make sure the mount drive has a filesystem
@@ -9,7 +9,7 @@
   tags: server
 
 - name: set mountpoints
-  mount: name=/backups src={{ mountable_share_drive | default('/dev/xvdb') }} fstype=auto opts=defaults,nobootwait dump=0 passno=2 state=mounted
+  mount: name={{ backup_mountpoint }} src={{ mountable_share_drive | default('/dev/xvdb') }} fstype=auto opts=defaults,nobootwait dump=0 passno=2 state=mounted
   tags: server
 
 - name: Ensure NFS utilities are installed.
@@ -21,6 +21,7 @@
   tags: server
 
 - name: copy /etc/exports
+  become: yes
   template: src=exports.j2 dest=/etc/exports owner=root group=root
   tags: server
 
