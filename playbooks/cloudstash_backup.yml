@@ -1,0 +1,19 @@
+---
+# Cloudstash Backup Playbook.
+- name: Start System Backup
+  hosts:
+    - controllers
+    - undercloud
+  roles:
+  - { role: rear/backup, vars: { backup: "backup" } }
+  tags:
+    - backup
+
+- name: Start System Rescue
+  hosts:
+    - controllers
+    - undercloud
+  roles:
+  - { role: rear/backup, vars: { rescue: "rescue" } }
+  tags:
+    - rescue

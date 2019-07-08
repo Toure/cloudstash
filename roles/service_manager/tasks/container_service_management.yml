@@ -1,0 +1,22 @@
+- name: Gather Container Service Name
+  shell: "docker ps -a --format '{{.Names}}'"
+  args:
+    excutable: "/bin/bash"
+  register: container_services
+  changed_when: false
+
+- name: Stop Service Container
+  docker_container: 
+    name: "{{ items }}"
+    state: stopped
+  with_items: "{{ container_services.stdout_lines }} "
+  tags:
+    - stop_container_services
+  
+- name: Start Service Container
+  docker_container: 
+    name: "{{ items }}"
+    state: started
+    with_items: " {{ container_services.stdout_lines }} "
+  tags:
+    - start_container_services

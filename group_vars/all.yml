@@ -1,8 +1,6 @@
 ---
 backup_mountpoint: /system_backups
 
-backup_file: 
-
 # Directory pathes for controller.
 backup_dirs:
   - /etc

@@ -1,0 +1,34 @@
+---
+- name: Backup client data
+  shell: rear -d -v mkbackup
+  register: mkbackup
+  tags: backup
+
+- name: Backup Standard Output
+  debug: 
+    msg: mkbackup.stdout
+  tags:
+    - backup
+
+- name: Backup Standard Error Output
+  debug: 
+    msg: mkbackup.stderr
+  tags:
+    - verbose 
+    - backup
+
+- name: Verify file presents
+  stat:
+    path: backup_mountpoint
+  register: mkbackup_status
+  tags: 
+    - backup
+    - verify 
+
+- name: Backup Status Check.
+  debug:
+    msg: Found backup image.
+  when: mkbackup_status.stat.exists
+  tags:
+    - verify
+    - backup

@@ -1,3 +1,5 @@
 ---
 
 - include_tasks: service_manager.yml
+
+- include_tasks: container_service_management.yml

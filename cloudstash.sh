@@ -5,7 +5,7 @@ if [ -t 1 ] ; then
 fi
 # Log everything from this script into _cloudstash.log
 echo "$0 $@" > _cloudstash.log
-exec &> >(tee -i -a _cloudstash.log )
+exec &> (tee -i -a _cloudstash.log)
 
 # With LANG set to everything else than C completely undercipherable errors
 # like "file not found" and decoding errors will start to appear during scripts

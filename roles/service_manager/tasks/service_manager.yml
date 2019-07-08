@@ -30,7 +30,7 @@
         loop_var: service_name
       tags:
         - start_systemctl_services
-    
+
     - name: Gather Container Service Name
       shell: "docker ps -a --format '{{.Names}}'"
       args:

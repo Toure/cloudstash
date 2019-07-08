@@ -1,0 +1,35 @@
+---
+- name: Create rescue image.
+  shell: rear -v mkrescue
+  register: mkrescue
+  tags:
+    - rescue
+
+- name: Rescue Standard Output 
+  debug: 
+    msg: mkrescue.stdout
+  tags:
+    - rescue
+
+- name: Rescue Standard Error Output 
+  debug: 
+    msg: mkrescue.stderr
+  tags:
+    - verbose
+    - rescue
+
+- name: Verify file presents
+  stat:
+    path: backup_mountpoint 
+  register: mkrescue_status
+  tags:
+    - verify
+    - rescue
+
+- name: Rescue Image Status
+  debug: 
+    msg: Rescue image found.
+  when: mkrescue.stat.exists
+  tags:
+    - verify
+    - rescue
