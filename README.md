@@ -17,7 +17,7 @@ Example Playbook
 ----------------
 To install packages and configure storage the following options should be used.
 
-$> ansible-playbook -i inventory --tags install playbooks/cloudstash.yml
+$> sh cloudstash.sh --install
 
 To perform a backup on a group of servers use the following:
 

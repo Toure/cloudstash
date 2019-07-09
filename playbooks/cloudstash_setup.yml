@@ -10,7 +10,7 @@
     - rear/setup
 
 - name: NFS Server setup.
-  hosts: nfs_servers
+  hosts: nfs_server
   gather_facts: true
   tags:
     - server
@@ -18,13 +18,9 @@
     - storage
 
 - name: NFS Client setup.
-  hosts: 
-    - controller_nodes
-    - undercloud
+  hosts: nfs_client
   gather_facts: true
   tags:
     - client
   roles:
     - storage
-
-- import_playbook: system_backup.yml 

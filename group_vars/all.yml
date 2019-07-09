@@ -1,4 +1,5 @@
 ---
+# Mount points for the server export and clients.
 backup_mountpoint: /system_backups
 
 # Directory pathes for controller.
@@ -20,14 +21,19 @@ backup_dirs:
   - /usr/libexec/os-apply-config/
   - /home/heat-admin
   - /root
+
+# Directory pathes to exclude from the system backups.
 backup_excludes:
   - /var/lib/nova/instances
   - /proc
   - /sys
   - /dev
   - /run
- 
+
+# Adjust the name here to reflect the name in the inventory / hosts file.
+# 
 nfs_client:
   - controller_nodes
+
 nfs_server:
   - undercloud

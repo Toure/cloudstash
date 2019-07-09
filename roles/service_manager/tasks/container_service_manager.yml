@@ -11,7 +11,7 @@
     state: stopped
   with_items: "{{ container_services.stdout_lines }} "
   tags:
-    - stop_container_services
+    - stop_services
   
 - name: Start Service Container
   docker_container: 
@@ -19,4 +19,4 @@
     state: started
     with_items: " {{ container_services.stdout_lines }} "
   tags:
-    - start_container_services
+    - start_services

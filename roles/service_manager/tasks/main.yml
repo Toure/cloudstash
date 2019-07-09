@@ -1,5 +1,7 @@
 ---
 
 - include_tasks: service_manager.yml
+  when: service_type is "service_manager"
 
-- include_tasks: container_service_management.yml
+- include_tasks: container_service_manager.yml
+  when: service_type is "container_service_manager"
