@@ -12,11 +12,22 @@
   mount: name={{ backup_mountpoint }} src={{ mountable_share_drive | default('/dev/xvdb') }} fstype=auto opts=defaults,nobootwait dump=0 passno=2 state=mounted
   tags: server
 
+- name: Packages for RHEL
+  set_fact:
+     nfs_server_packages:
+        - nfs-common
+        - nfs-kernel-server
+  when: ansible_distribution == 'RedHat'
+
+- name: Packages for CentOS
+  set_fact:
+     nfs_server_packages:
+        - nfs-utils
+  when: ansible_distribution == 'CentOS'
+
 - name: Ensure NFS utilities are installed.
   yum: 
-    name:
-    - nfs-common
-    - nfs-kernel-server
+    name: "{{ nfs_server_packages }}"
     state: present
   tags: server
 

@@ -1,10 +1,23 @@
 ---
 # Task responsible for configuring nfs clients.
+
+- name: Packages for RHEL
+  set_fact:
+     nfs_client_packages:
+        - nfs-common
+        - firewalld
+  when: ansible_distribution == 'RedHat'
+
+- name: Packages for CentOS
+  set_fact:
+     nfs_client_packages:
+        - nfs-utils
+        - firewalld
+  when: ansible_distribution == 'CentOS'
+
 - name: Ensure NFS client is installed.
-  yum: 
-    name: 
-      - nfs-common
-      - firewalld 
+  yum:
+    name: "{{ nfs_client_packages }}"
     state: present
   tags: clients
 
