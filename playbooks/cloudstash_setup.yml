@@ -9,6 +9,8 @@
   roles:
     - rear/setup
 
+# TODO: change the two plays to become a more generic interface.
+# 
 - name: NFS Server setup.
   hosts: nfs_server
   gather_facts: true
