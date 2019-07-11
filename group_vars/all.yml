@@ -37,3 +37,10 @@ nfs_client:
 
 nfs_server:
   - undercloud
+
+
+# Configure which service type structure is deployed on the overcloud nodes.
+# chose are:
+# service_type = standard (classic systemd)
+# service_type = containerized (container based services)
+service_type: containerized

@@ -13,6 +13,8 @@
 - name: check rear install
   command: /usr/sbin/rear -V
   register: rear_version
+  when: "rear_version.stat.exists"
+  changed_when: False
   tags:
     - install
 

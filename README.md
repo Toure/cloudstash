@@ -11,7 +11,7 @@ The goal of this role is to provide a means of protecting the data and configura
 Configuration
 -------------
 
-First all project configurations will be located in the defaults directory where attributes such as ip addresses, directory pathes, and other system information can be configured. Command line options can also be used to override configured options.
+First all project configurations will be located in the group_vars directory where attributes such as ip addresses, directory pathes, and other system information can be configured. Command line options can also be used to override configured options.
 
 Example Playbook
 ----------------
@@ -21,11 +21,11 @@ $> sh cloudstash.sh --install
 
 To perform a backup on a group of servers use the following:
 
-$> ansible-playbook -i inventory --tags backup playbooks/cloudstash.yml
+$> sh cloudstash -b --tags backup
 
 To build a rescue image:
 
-$> ansible-playbook -i inventory --tags rescue playbooks/cloudstash.yml
+$> sh cloudstash --tags rescue
 
 
 License

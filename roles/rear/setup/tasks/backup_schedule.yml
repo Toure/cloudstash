@@ -1,0 +1,16 @@
+---
+# configure backup snapshots.
+- name: Configure Scheduled Backups.
+  cron:
+    name: ReaR Schedule Backups
+    weekday: 0
+    minute: 0
+    hour: 0
+    day: "*"
+    month: "*"
+    user: root
+    job: "/usr/sbin/rear checklayout || /usr/sbin/rear mkrescue"
+    cron_file: rear_auto_backup
+    state: present
+  tags:
+    - schedule_backup

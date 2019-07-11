@@ -1,32 +1,28 @@
 ---
 # Service Management playbook.
-- name: Service Management.
-  hosts: controller_nodes
-  serial: 1
-  tasks:
-    - name: Gather service list
-      shell: "systemctl list-unit-files --state=enabled --type=service | awk '/^{{ service_name }}.* enabled$/ {print $1}'"
-      args:
-        executable: "/bin/bash"
-      register: _enabled_services
-      changed_when: false
+- name: Gather service list
+  shell: "systemctl list-unit-files --state=enabled --type=service | awk '/^{{ service_name }}.* enabled$/ {print $1}'"
+  args:
+    executable: "/bin/bash"
+  register: _enabled_services
+  changed_when: false
 
-    - name: Execute service action
-      service:
-        name: "{{ service_name }}"
-        state: stopped
-      with_items: "{{ (_enabled_services.stdout_lines | difference(service_negate | default([]))) | list }}"
-      loop_control:
-        loop_var: service_name
-      tags:
-        - stop_services
+- name: Execute service action
+  service:
+    name: "{{ service_name }}"
+    state: stopped
+  with_items: "{{ (_enabled_services.stdout_lines | difference(service_negate | default([]))) | list }}"
+  loop_control:
+    loop_var: service_name
+  tags:
+    - stop_services
 
-    - name: Start Service
-      service:
-        name: "{{ service_name }} "
-        state: started
-      with_items: "{{ (_enabled_services.stdout_lines | difference(service_negate | default([]))) | list }}"
-      loop_control:
-        loop_var: service_name
-      tags:
-        - start_services
+- name: Start Service
+  service:
+    name: "{{ service_name }} "
+    state: started
+  with_items: "{{ (_enabled_services.stdout_lines | difference(service_negate | default([]))) | list }}"
+  loop_control:
+    loop_var: service_name
+  tags:
+    - start_services
