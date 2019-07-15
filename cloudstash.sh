@@ -12,6 +12,7 @@ exec &> (tee -i -a _cloudstash.log)
 # or even ansible modules
 LANG=C
 
+: ${OPT_PLAYBOOK:=""}
 : ${OPT_INSTALL:=""}
 : ${OPT_BACKUP:=""}
 : ${OPT_RESCUE:""}
@@ -53,28 +54,6 @@ EOBANNER
 
 fi
 }
-
-# Install all required packages on configured nodes.
-install () {
-
-}
-
-# Perform initial backup on listed inventory
-backup () {
-
-}
-
-# Create a rescue image which can be used to restore server
-rescue () {
-
-}
-
-# Deploy configured storage option.
-configure_storage () {
-
-
-}
-
 
 usage () {
     echo "Usage: $0 --install"
@@ -141,11 +120,6 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        --playbook|-p)
-            OPT_PLAYBOOK=$2
-            shift
-            ;;
-
         --extra-vars|-e)
             OPT_VARS+=("-e")
             OPT_VARS+=("$2")
@@ -183,27 +157,36 @@ while [ "x$1" != "x" ]; do
 done
 
 
-if [ "$PRINT_LOGO" = 1 ]; then
+if [ "$PRINT_LOGO" == 1 ]; then
     print_logo
     echo "..."
     echo "Nothing more to do"
     exit
 fi
 
-
-if [ "$OPT_INSTALL" = 1 ]; then
-    echo "NOTICE: installing packages" >&2
-    install
-    exit $?
-fi
-
-
-
 print_logo
 
 set -ex
 
-if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
+if [ "$OPT_INSTALL" == 1 ]; then
+    echo "NOTICE: installing packages"
+    OPT_PLAYBOOK = "playbooks/cloudstash_setup.yml"
+    OPT_TAGS = "install"    
+fi
+
+if [ "$OPT_BACKUP" == 1 ]; then
+    echo "NOTICE: starting system backup"
+    OPT_PLAYBOOK = "playbooks/cloudstash_backup.yml"
+    OPT_TAGS = "stop_services, db_backup, backup, start_services"
+fi
+
+if [ "$OPT_RESCUE" == 1 ]; then
+    echo "NOTICE: creating system rescue image."
+    OPT_PLAYBOOK = "playbooks/cloudstash_backup.yml"
+    OPT_TAGS = "stop_services, db_backup, rescue, start_services"
+fi
+
+if [ "$OPT_DEBUG_ANSIBLE" == 1 ]; then
     VERBOSITY=vvvv
 else
     VERBOSITY=vv
