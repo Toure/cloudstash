@@ -15,8 +15,7 @@
 - name: Ensure NFS utilities are installed.
   yum: 
     name:
-    - nfs-common
-    - nfs-kernel-server
+    - nfs-utils
     state: present
   tags: server
 
@@ -25,6 +24,10 @@
   template: src=exports.j2 dest=/etc/exports owner=root group=root
   tags: server
 
+- name: enable nfs server
+  service: name=nfs-server state=enabled
+  tags: server
+
 - name: restart nfs server
-  service: name=nfs-kernel-server state=restarted
+  service: name=nfs-server state=restarted
   tags: server

@@ -3,7 +3,7 @@
 - name: Ensure NFS client is installed.
   yum: 
     name: 
-      - nfs-common
+      - nfs-utils
       - firewalld 
     state: present
   tags: clients
