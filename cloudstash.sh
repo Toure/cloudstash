@@ -12,10 +12,10 @@ exec &> >(tee -i -a _cloudstash.log)
 # or even ansible modules
 LANG=C
 
-: ${OPT_PLAYBOOK:=""}
-: ${OPT_INSTALL:=""}
-: ${OPT_BACKUP:=""}
-: ${OPT_RESCUE:""}
+: ${OPT_PLAYBOOK:="playbooks/cloudstash_setup.yml"}
+: ${OPT_INSTALL:=0}
+: ${OPT_BACKUP:=0}
+: ${OPT_RESCUE:=0}
 : ${OPT_TAGS:=""}
 : ${OPT_SKIP_TAGS:=""}
 : ${OPT_LIST_TASKS_ONLY=""}
@@ -106,9 +106,6 @@ usage () {
 
 }
 
-OPT_VARS=()
-OPT_ENVIRONMENT=()
-
 while [ "x$1" != "x" ]; do
     case "$1" in
         --install|-i)
@@ -117,6 +114,10 @@ while [ "x$1" != "x" ]; do
 
         --backup|-b)
             OPT_SYSTEM_PACKAGES=1
+            ;;
+
+        --rescue|-r)
+            OPT_RESCUE=1
             ;;
 
         --ansible-debug|-v)
@@ -184,33 +185,13 @@ fi
 
 print_logo
 
-if [ -z $OPT_INSTALL ] || [ -z $OPT_BACKUP ] || [ -z $OPT_RESCUE ]; then
+if [[ -z $OPT_INSTALL || -z $OPT_BACKUP || -z $OPT_RESCUE ]]; then
     echo ""
     readme
     echo ""
     usage
-    exit
+    exit 1
 fi
-
-if [ "$OPT_INSTALL" = 1 ]; then
-    echo "NOTICE: installing packages"
-    OPT_PLAYBOOK = "playbooks/cloudstash_setup.yml"
-    OPT_TAGS = "install"    
-fi
-
-if [ "$OPT_BACKUP" = 1 ]; then
-    echo "NOTICE: starting system backup"
-    OPT_PLAYBOOK = "playbooks/cloudstash_backup.yml"
-    OPT_TAGS = "stop_services, db_backup, backup, start_services"
-fi
-
-if [ "$OPT_RESCUE" = 1 ]; then
-    echo "NOTICE: creating system rescue image."
-    OPT_PLAYBOOK = "playbooks/cloudstash_backup.yml"
-    OPT_TAGS = "stop_services, db_backup, rescue, start_services"
-fi
-
-
 
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
     VERBOSITY=vvvv
@@ -218,10 +199,29 @@ else
     VERBOSITY=vv
 fi
 
+if [ "$OPT_INSTALL" = 1 ]; then
+    echo "NOTICE: installing packages"
+    OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
+    OPT_TAGS="install"
+fi
+
+if [ "$OPT_BACKUP" = 1 ]; then
+    echo "NOTICE: starting system backup"
+    OPT_PLAYBOOK="playbooks/cloudstash_backup.yml"
+    OPT_TAGS="stop_services, db_backup, backup, start_services"
+fi
+
+if [ "$OPT_RESCUE" = 1 ]; then
+    echo "NOTICE: creating system rescue image."
+    OPT_PLAYBOOK="playbooks/cloudstash_backup.yml"
+    OPT_TAGS="stop_services, db_backup, rescue, start_services"
+fi
+
+
 set -ex
 
 ansible-playbook -$VERBOSITY $OPT_PLAYBOOK \
-    -e @$OPT_NODES \
     ${OPT_LIST_TASKS_ONLY} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
-    ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS}
+    ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS} \
+    ${OPT_NODES}
