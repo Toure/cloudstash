@@ -12,7 +12,7 @@ exec &> >(tee -i -a _cloudstash.log)
 # or even ansible modules
 LANG=C
 
-: ${OPT_PLAYBOOK:="playbooks/cloudstash_setup.yml"}
+: ${OPT_PLAYBOOK:=""}
 : ${OPT_INSTALL:=0}
 : ${OPT_BACKUP:=0}
 : ${OPT_RESCUE:=0}
@@ -86,14 +86,12 @@ usage () {
     echo "  -N, --nodes <fqdn>"
     echo "                      specify the hostname or IP of nodes that should configured."
     echo ""
-    echo "  -e, --extra-vars <key>=<value>"
-    echo "                      additional ansible variables, can be used multiple times"
-    echo ""
     echo "Advanced options:"
+    echo ""
+    # echo "  -e, --extra-vars <key>=<value>"
+    # echo "                      additional ansible variables, can be used multiple times"
     echo "  -v, --ansible-debug"
     echo "                      invoke ansible-playbook with -vvvv"
-    echo "  -y, --dry-run"
-    echo "                      dry run of playbook, invoke ansible with --list-tasks"
     echo "  -t, --tags <tag1>[,<tag2>,...]"
     echo "                      only run plays and tasks tagged with these values,"
     echo "                      specify 'all' to run everything"
@@ -101,7 +99,6 @@ usage () {
     echo "  -S, --skip-tags <tag1>[,<tag2>,...]"
     echo "                      only run plays and tasks whose tags do"
     echo "                      not match these values"
-    echo "  -l, --print-logo    print the TripleO logo and exit"
     echo "  -h, --help          print this help and exit"
 
 }
@@ -139,24 +136,15 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        --extra-vars|-e)
-            OPT_VARS+=("-e")
-            OPT_VARS+=("$2")
-            shift
-            ;;
+        # --extra-vars|-e)
+        #     OPT_VARS+=("-e")
+        #     OPT_VARS+=("$2")
+        #     shift
+        #     ;;
 
         --help|-h)
             usage
             exit
-            ;;
-
-        # developer options
-        --dry-run|-y)
-            OPT_LIST_TASKS_ONLY=" --list-tasks"
-            ;;
-
-        --print-logo|-l)
-            PRINT_LOGO=1
             ;;
 
         --) shift
@@ -176,16 +164,15 @@ while [ "x$1" != "x" ]; do
 done
 
 
-if [ "$PRINT_LOGO" = 1 ]; then
-    print_logo
-    echo "..."
-    echo "Nothing more to do"
-    exit
-fi
-
 print_logo
 
-if [[ -z $OPT_INSTALL || -z $OPT_BACKUP || -z $OPT_RESCUE ]]; then
+echo "Install: $OPT_INSTALL"
+echo "Backup: $OPT_BACKUP"
+echo "RESCUE: $OPT_RESCUE"
+
+if [[ $OPT_INSTALL != 0 || $OPT_BACKUP != 0 || $OPT_RESCUE != 0 ]]; then
+    echo "Starting Cloudstash"
+else
     echo ""
     readme
     echo ""
@@ -218,10 +205,10 @@ if [ "$OPT_RESCUE" = 1 ]; then
 fi
 
 
-set -ex
 
 ansible-playbook -$VERBOSITY $OPT_PLAYBOOK \
     ${OPT_LIST_TASKS_ONLY} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
     ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS} \
+    # ${OPT_VARS}\
     ${OPT_NODES}

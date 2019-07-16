@@ -17,15 +17,15 @@ Example Playbook
 ----------------
 To install packages and configure storage the following options should be used.
 
-$> sh cloudstash.sh --install
+$> bash cloudstash.sh --install
 
 To perform a backup on a group of servers use the following:
 
-$> sh cloudstash -b --tags backup
+$> bash cloudstash.sh --backup
 
 To build a rescue image:
 
-$> sh cloudstash --tags rescue
+$> bash cloudstash.sh --rescue
 
 
 License
