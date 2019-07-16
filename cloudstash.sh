@@ -24,7 +24,7 @@ print_logo () {
 
 if [ `TERM=${TERM:-vt100} tput cols` -lt 105 ]; then
 
-cat <<EOBANNER
+cat << "EOBANNER"
 -----------------------------------------------------------
 |    ________                _______ __             __    |
 |   / ____/ /___  __  ______/ / ___// /_____ ______/ /_   |
@@ -39,7 +39,7 @@ EOBANNER
 
 else
 
-cat <<EOBANNER
+cat << "EOBANNER"
 -----------------------------------------------------------------------------------
 |     ______    __                      __   _____   __                     __    |
 |    / ____/   / /  ____   __  __  ____/ /  / ___/  / /_  ____ _   _____   / /_   |
@@ -49,17 +49,35 @@ cat <<EOBANNER
 |                                                                                 |
 -----------------------------------------------------------------------------------
 
-
 EOBANNER
 
 fi
 }
 
+readme () {
+    cat <<  "EODOC"
+Example USAGE
+-------------
+To install packages and configure storage the following options should be used.
+
+$> bash cloudstash.sh --install
+
+To perform a backup on a group of servers use the following:
+
+$> bash cloudstash.sh -b --tags backup
+
+To build a rescue image:
+
+$> bash cloudstash.sh --tags rescue
+
+EODOC
+}
+
 usage () {
-    echo "Usage: $0 --install"
-    echo "                      install cloudstash packages dependencies and exit"
+    echo "$0 Basic options:"
     echo ""
-    echo "Basic options:"
+    echo "  -i, --install       install cloudstash packages dependencies and exit"
+    echo ""
     echo "  -b, --backup        execute the backup operation on nodes which are provided on the"
     echo "                      command line which -N flag or configured in the inventory file."
     echo ""
@@ -149,9 +167,7 @@ while [ "x$1" != "x" ]; do
             exit 2
             ;;
 
-        *)  echo "Please specify an option."
-            usage
-            exit
+        *)  break
             ;;
     esac
 
@@ -159,7 +175,7 @@ while [ "x$1" != "x" ]; do
 done
 
 
-if [ "$PRINT_LOGO" == 1 ]; then
+if [ "$PRINT_LOGO" = 1 ]; then
     print_logo
     echo "..."
     echo "Nothing more to do"
@@ -168,31 +184,41 @@ fi
 
 print_logo
 
-set -ex
+if [ -z $OPT_INSTALL ] || [ -z $OPT_BACKUP ] || [ -z $OPT_RESCUE ]; then
+    echo ""
+    readme
+    echo ""
+    usage
+    exit
+fi
 
-if [ "$OPT_INSTALL" == 1 ]; then
+if [ "$OPT_INSTALL" = 1 ]; then
     echo "NOTICE: installing packages"
     OPT_PLAYBOOK = "playbooks/cloudstash_setup.yml"
     OPT_TAGS = "install"    
 fi
 
-if [ "$OPT_BACKUP" == 1 ]; then
+if [ "$OPT_BACKUP" = 1 ]; then
     echo "NOTICE: starting system backup"
     OPT_PLAYBOOK = "playbooks/cloudstash_backup.yml"
     OPT_TAGS = "stop_services, db_backup, backup, start_services"
 fi
 
-if [ "$OPT_RESCUE" == 1 ]; then
+if [ "$OPT_RESCUE" = 1 ]; then
     echo "NOTICE: creating system rescue image."
     OPT_PLAYBOOK = "playbooks/cloudstash_backup.yml"
     OPT_TAGS = "stop_services, db_backup, rescue, start_services"
 fi
 
-if [ "$OPT_DEBUG_ANSIBLE" == 1 ]; then
+
+
+if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
     VERBOSITY=vvvv
 else
     VERBOSITY=vv
 fi
+
+set -ex
 
 ansible-playbook -$VERBOSITY $OPT_PLAYBOOK \
     -e @$OPT_NODES \
