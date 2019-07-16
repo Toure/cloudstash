@@ -1,6 +1,6 @@
 # Cloudstash
 
-[![N|Cloudstash](https://upload.wikimedia.org/wikipedia/commons/4/43/Stash_Logo.png)
+![N|Cloudstash](https://upload.wikimedia.org/wikipedia/commons/4/43/Stash_Logo.png)
 
 Backup solution for distributed compute platforms.
 
