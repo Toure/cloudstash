@@ -1,39 +1,84 @@
-CloudStash
-=========
+# Cloudstash
+
+[![N|Cloudstash](https://upload.wikimedia.org/wikipedia/commons/4/43/Stash_Logo.png)]
 
 Backup solution for distributed compute platforms.
 
-Rationale
----------
+  - Ansible
+  - ReaR
+  - Magic, just a little
 
 The goal of this role is to provide a means of protecting the data and configuration of a deployed cloud platform. This role will be centered around RHEL7+, RHOS, and Openshift (future releases.)
 
-Configuration
--------------
+### Tech
 
-First all project configurations will be located in the group_vars directory where attributes such as ip addresses, directory pathes, and other system information can be configured. Command line options can also be used to override configured options.
+Cloudstash uses a number of open source projects to work properly:
 
-Example Playbook
-----------------
-To install packages and configure storage the following options should be used.
+* [Ansible] - software provisioning, configuration management, and application-deployment tool.
+* [ReaR] - Linux bare metal disaster recovery solution
 
-$> bash cloudstash.sh --install
+And of course Cloudstash itself is open source with a [toure/cloudstash][toure]
+ on GitHub.
 
-To perform a backup on a group of servers use the following:
+### Installation
 
-$> bash cloudstash.sh --backup
+Cloudstash requires [Ansible](https://www.ansible.com/) v2.5+ to run.
 
-To build a rescue image:
+Install:
 
-$> bash cloudstash.sh --rescue
+```sh
+$ git clone https://github.com/Toure/cloudstash.git
+$ cd cloudstash
+```
+Edit inventory file: (with your favortie editor)
 
+### Example Content:
+
+>[controller_nodes]
+0.0.0.0  ansible_user=heat-admin
+0.0.0.0  ansible_user=heat-admin
+
+>[undercloud]
+0.0.0.0  ansible_user=stack
+
+>[hypervisor_nodes]
+0.0.0.0  ansible_user=root
+>[nfs_servers]
+0.0.0.0
+
+### Install packages on all nodes:
+```sh
+$ bash cloudstash.sh --install
+```
+
+### Perform the first systems backup:
+```sh
+$ bash cloudstash.sh --backup
+```
+
+### Generate a rescue image:
+```sh
+$ bash cloudstash.sh --rescue
+```
+
+### Development
+
+Want to contribute? Great! Please submit PRs with patches or
+open a bug as a feature request.
+
+### Todos
+
+ - Write Tests
+ - Add features which I couldn't think about.
 
 License
--------
+----
 
-Apache 2.0
+Apache v2
 
-Author Information
-------------------
 
-Toure Dunnon
+**Free Software, Hell Yeah!**
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+
+[toure]: https://github.com/Toure/cloudstash.git
