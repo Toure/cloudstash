@@ -12,7 +12,8 @@
 # TODO: change the two plays to become a more generic interface.
 # 
 - name: NFS Server setup.
-  hosts: nfs_server
+  hosts: 
+    - nfs_server
   gather_facts: true
   tags:
     - server
@@ -20,7 +21,8 @@
     - storage
 
 - name: NFS Client setup.
-  hosts: nfs_client
+  hosts: 
+    - nfs_client
   gather_facts: true
   tags:
     - client

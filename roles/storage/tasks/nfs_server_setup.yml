@@ -2,7 +2,7 @@
 # Tasks responsible for configuring the nfs server.
 - name: Create mountable dir
   file: 
-    path: backup_mountpoint
+    path: "{{ backup_mountpoint }}"
     state: directory 
     mode: 777 
     owner: root 
@@ -17,7 +17,7 @@
 
 - name: set mountpoints
   mount: 
-    name: backup_mountpoint 
+    name: "{{ backup_mountpoint }}" 
     src: "{{ mountable_share_drive | default('/dev/xvdb') }}"
     fstype: auto 
     opts: defaults,nobootwait 
