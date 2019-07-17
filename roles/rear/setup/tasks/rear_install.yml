@@ -17,7 +17,7 @@
     - install
 
 - debug:
-  msg: "Found ReaR..."
+    msg: "Found ReaR..."
   when: rear_version.stdout.find('Relax-and-Recover') == True
   tags:
     - install
