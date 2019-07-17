@@ -1,5 +1,7 @@
 ---
 # tasks file for database
 - include_tasks: mysql_backup.yml
+  when: backup_mysql is defined 
 
 - include_tasks: redis_backup.yml
+  when: backup_redis is defined

@@ -30,22 +30,24 @@ Install:
 $ git clone https://github.com/Toure/cloudstash.git
 $ cd cloudstash
 ```
-Edit inventory file: (with your favortie editor)
+Edit the inventory file: (with your favortie editor)
 
 ### Example Content:
 
->[controller_nodes]
->0.0.0.0  ansible_user=heat-admin
->0.0.0.0  ansible_user=heat-admin
+```
+[controller_nodes]
+0.0.0.0  ansible_user=heat-admin
+0.0.0.0  ansible_user=heat-admin
 
->[undercloud]
->0.0.0.0  ansible_user=stack
+[undercloud]
+0.0.0.0  ansible_user=stack
 
->[hypervisor_nodes]
->0.0.0.0  ansible_user=root
+[hypervisor_nodes]
+0.0.0.0  ansible_user=root
 
->[nfs_servers]
->0.0.0.0
+[nfs_servers]
+0.0.0.0
+```
 
 ### Install packages on all nodes:
 ```sh
