@@ -35,8 +35,7 @@ backup_excludes:
 nfs_client:
   - controller_nodes
 
-nfs_server:
-  - undercloud
+nfs_server: 192.168.24.1 
 
 
 # Configure which service type structure is deployed on the overcloud nodes.
