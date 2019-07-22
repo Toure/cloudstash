@@ -12,13 +12,13 @@
 - name: make sure the mount drive has a filesystem
   filesystem: 
     fstype: ext4 
-    dev: "{{ mountable_share_drive | default('/dev/xvdb') }}"
+    dev: "{{ mountable_share_drive | default('/dev/vdb') }}"
   tags: server
 
 - name: set mountpoints
   mount: 
     name: "{{ backup_mountpoint }}" 
-    src: "{{ mountable_share_drive | default('/dev/xvdb') }}"
+    src: "{{ mountable_share_drive | default('/dev/vdb') }}"
     fstype: auto 
     opts: defaults,nobootwait 
     state: mounted
