@@ -1,28 +1,26 @@
 ---
 # Service Management playbook.
+
 - name: Gather service list
-  shell: "systemctl list-unit-files --state=enabled --type=service | awk '/^{{ service_name }}.* enabled$/ {print $1}'"
+  shell: "systemctl list-unit-files --state=enabled --type=service | awk '/^{{ item }}.* enabled$/ {print $1}'"
   args:
     executable: "/bin/bash"
+  loop: "{{ service_map | subelements('systemd_unit', skip_missing=True) }}"
   register: _enabled_services
   changed_when: false
 
 - name: Execute service action
   service:
-    name: "{{ service_name }}"
+    name: "{{ item }}"
     state: stopped
   with_items: "{{ (_enabled_services.stdout_lines | difference(service_negate | default([]))) | list }}"
-  loop_control:
-    loop_var: service_name
   tags:
     - stop_services
 
 - name: Start Service
   service:
-    name: "{{ service_name }} "
+    name: "{{ item }} "
     state: started
   with_items: "{{ (_enabled_services.stdout_lines | difference(service_negate | default([]))) | list }}"
-  loop_control:
-    loop_var: service_name
   tags:
     - start_services

@@ -1,14 +1,14 @@
 [controller_nodes]
-172.16.1.1  ansible_user=heat-admin
-172.16.1.2  ansible_user=heat-admin
+#0.0.0.0  ansible_user=heat-admin
+#0.0.0.0  ansible_user=heat-admin
 
 [undercloud]
-172.16.1.3  ansible_user=stack
+#0.0.0.0  ansible_user=stack
 
 [hypervisor_nodes]
-192.168.1.1  ansible_user=root
-192.168.1.2  ansible_user=root
+#0.0.0.0  ansible_user=root
+#0.0.0.0  ansible_user=root
 
 [nfs_servers]
-172.16.1.1
-172.16.1.2
+#0.0.0.0
+#0.0.0.0

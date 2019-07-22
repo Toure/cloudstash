@@ -5,16 +5,17 @@ if [ -t 1 ] ; then
 fi
 # Log everything from this script into _cloudstash.log
 echo "$0 $@" > _cloudstash.log
-exec &> (tee -i -a _cloudstash.log)
+exec &> >(tee -i -a _cloudstash.log)
 
 # With LANG set to everything else than C completely undercipherable errors
 # like "file not found" and decoding errors will start to appear during scripts
 # or even ansible modules
 LANG=C
 
-: ${OPT_INSTALL:=""}
-: ${OPT_BACKUP:=""}
-: ${OPT_RESCUE:""}
+: ${OPT_PLAYBOOK:=""}
+: ${OPT_INSTALL:=0}
+: ${OPT_BACKUP:=0}
+: ${OPT_RESCUE:=0}
 : ${OPT_TAGS:=""}
 : ${OPT_SKIP_TAGS:=""}
 : ${OPT_LIST_TASKS_ONLY=""}
@@ -23,7 +24,7 @@ print_logo () {
 
 if [ `TERM=${TERM:-vt100} tput cols` -lt 105 ]; then
 
-cat <<EOBANNER
+cat << "EOBANNER"
 -----------------------------------------------------------
 |    ________                _______ __             __    |
 |   / ____/ /___  __  ______/ / ___// /_____ ______/ /_   |
@@ -38,7 +39,7 @@ EOBANNER
 
 else
 
-cat <<EOBANNER
+cat << "EOBANNER"
 -----------------------------------------------------------------------------------
 |     ______    __                      __   _____   __                     __    |
 |    / ____/   / /  ____   __  __  ____/ /  / ___/  / /_  ____ _   _____   / /_   |
@@ -48,39 +49,35 @@ cat <<EOBANNER
 |                                                                                 |
 -----------------------------------------------------------------------------------
 
-
 EOBANNER
 
 fi
 }
 
-# Install all required packages on configured nodes.
-install () {
+readme () {
+    cat <<  "EODOC"
+Example USAGE
+-------------
+To install packages and configure storage the following options should be used.
 
+$> bash cloudstash.sh --install
+
+To perform a backup on a group of servers use the following:
+
+$> bash cloudstash.sh -b --tags backup
+
+To build a rescue image:
+
+$> bash cloudstash.sh --tags rescue
+
+EODOC
 }
-
-# Perform initial backup on listed inventory
-backup () {
-
-}
-
-# Create a rescue image which can be used to restore server
-rescue () {
-
-}
-
-# Deploy configured storage option.
-configure_storage () {
-
-
-}
-
 
 usage () {
-    echo "Usage: $0 --install"
-    echo "                      install cloudstash packages dependencies and exit"
+    echo "$0 Basic options:"
     echo ""
-    echo "Basic options:"
+    echo "  -i, --install       install cloudstash packages dependencies and exit"
+    echo ""
     echo "  -b, --backup        execute the backup operation on nodes which are provided on the"
     echo "                      command line which -N flag or configured in the inventory file."
     echo ""
@@ -89,14 +86,12 @@ usage () {
     echo "  -N, --nodes <fqdn>"
     echo "                      specify the hostname or IP of nodes that should configured."
     echo ""
-    echo "  -e, --extra-vars <key>=<value>"
-    echo "                      additional ansible variables, can be used multiple times"
-    echo ""
     echo "Advanced options:"
+    echo ""
+    # echo "  -e, --extra-vars <key>=<value>"
+    # echo "                      additional ansible variables, can be used multiple times"
     echo "  -v, --ansible-debug"
     echo "                      invoke ansible-playbook with -vvvv"
-    echo "  -y, --dry-run"
-    echo "                      dry run of playbook, invoke ansible with --list-tasks"
     echo "  -t, --tags <tag1>[,<tag2>,...]"
     echo "                      only run plays and tasks tagged with these values,"
     echo "                      specify 'all' to run everything"
@@ -104,13 +99,9 @@ usage () {
     echo "  -S, --skip-tags <tag1>[,<tag2>,...]"
     echo "                      only run plays and tasks whose tags do"
     echo "                      not match these values"
-    echo "  -l, --print-logo    print the TripleO logo and exit"
     echo "  -h, --help          print this help and exit"
 
 }
-
-OPT_VARS=()
-OPT_ENVIRONMENT=()
 
 while [ "x$1" != "x" ]; do
     case "$1" in
@@ -120,6 +111,10 @@ while [ "x$1" != "x" ]; do
 
         --backup|-b)
             OPT_SYSTEM_PACKAGES=1
+            ;;
+
+        --rescue|-r)
+            OPT_RESCUE=1
             ;;
 
         --ansible-debug|-v)
@@ -141,29 +136,15 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        --playbook|-p)
-            OPT_PLAYBOOK=$2
-            shift
-            ;;
-
-        --extra-vars|-e)
-            OPT_VARS+=("-e")
-            OPT_VARS+=("$2")
-            shift
-            ;;
+        # --extra-vars|-e)
+        #     OPT_VARS+=("-e")
+        #     OPT_VARS+=("$2")
+        #     shift
+        #     ;;
 
         --help|-h)
             usage
             exit
-            ;;
-
-        # developer options
-        --dry-run|-y)
-            OPT_LIST_TASKS_ONLY=" --list-tasks"
-            ;;
-
-        --print-logo|-l)
-            PRINT_LOGO=1
             ;;
 
         --) shift
@@ -175,7 +156,7 @@ while [ "x$1" != "x" ]; do
             exit 2
             ;;
 
-        *)    break
+        *)  break
             ;;
     esac
 
@@ -183,25 +164,21 @@ while [ "x$1" != "x" ]; do
 done
 
 
-if [ "$PRINT_LOGO" = 1 ]; then
-    print_logo
-    echo "..."
-    echo "Nothing more to do"
-    exit
-fi
-
-
-if [ "$OPT_INSTALL" = 1 ]; then
-    echo "NOTICE: installing packages" >&2
-    install
-    exit $?
-fi
-
-
-
 print_logo
 
-set -ex
+echo "Install: $OPT_INSTALL"
+echo "Backup: $OPT_BACKUP"
+echo "RESCUE: $OPT_RESCUE"
+
+if [[ $OPT_INSTALL != 0 || $OPT_BACKUP != 0 || $OPT_RESCUE != 0 ]]; then
+    echo "Starting Cloudstash"
+else
+    echo ""
+    readme
+    echo ""
+    usage
+    exit 1
+fi
 
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
     VERBOSITY=vvvv
@@ -209,8 +186,29 @@ else
     VERBOSITY=vv
 fi
 
+if [ "$OPT_INSTALL" = 1 ]; then
+    echo "NOTICE: installing packages"
+    OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
+    OPT_TAGS="install"
+fi
+
+if [ "$OPT_BACKUP" = 1 ]; then
+    echo "NOTICE: starting system backup"
+    OPT_PLAYBOOK="playbooks/cloudstash_backup.yml"
+    OPT_TAGS="stop_services, db_backup, backup, start_services"
+fi
+
+if [ "$OPT_RESCUE" = 1 ]; then
+    echo "NOTICE: creating system rescue image."
+    OPT_PLAYBOOK="playbooks/cloudstash_backup.yml"
+    OPT_TAGS="stop_services, db_backup, rescue, start_services"
+fi
+
+
+
 ansible-playbook -$VERBOSITY $OPT_PLAYBOOK \
-    -e @$OPT_NODES \
     ${OPT_LIST_TASKS_ONLY} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
-    ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS}
+    ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS} \
+    # ${OPT_VARS}\
+    ${OPT_NODES}

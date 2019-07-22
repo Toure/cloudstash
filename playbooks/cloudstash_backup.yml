@@ -1,11 +1,11 @@
 ---
 # Cloudstash Backup Playbook.
 - name: Stop all running services
-  host:
+  hosts:
     - controllers
   roles:
     - role: service_manager
-      vars: "{{ service_type }}"
+      vars: { service_type: "{{ service_type }}" } 
       tags: stop_services
 
 - name: Backup databases on controller nodes.
@@ -35,9 +35,9 @@
     - rescue
 
 - name: Start all services.
-  host:
+  hosts:
     - controllers
   roles:
     - role: service_manager
-      vars: "{{ service_type }}"
+      vars: { service_type: "{{ service_type }}" }
       tags: start_services

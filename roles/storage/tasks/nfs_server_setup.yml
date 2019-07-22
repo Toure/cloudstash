@@ -1,15 +1,27 @@
 ---
 # Tasks responsible for configuring the nfs server.
 - name: Create mountable dir
-  file: path={{ backup_mountpoint }} state=directory mode=777 owner=root group=root
+  file: 
+    path: "{{ backup_mountpoint }}"
+    state: directory 
+    mode: 777 
+    owner: root 
+    group: root
   tags: server
 
 - name: make sure the mount drive has a filesystem
-  filesystem: fstype=ext4 dev={{ mountable_share_drive | default('/dev/xvdb') }}
+  filesystem: 
+    fstype: ext4 
+    dev: "{{ mountable_share_drive | default('/dev/vdb') }}"
   tags: server
 
 - name: set mountpoints
-  mount: name={{ backup_mountpoint }} src={{ mountable_share_drive | default('/dev/xvdb') }} fstype=auto opts=defaults,nobootwait dump=0 passno=2 state=mounted
+  mount: 
+    name: "{{ backup_mountpoint }}" 
+    src: "{{ mountable_share_drive | default('/dev/vdb') }}"
+    fstype: auto 
+    opts: defaults,nobootwait 
+    state: mounted
   tags: server
 
 - name: Packages for RHEL
@@ -28,14 +40,27 @@
 - name: Ensure NFS utilities are installed.
   yum: 
     name: "{{ nfs_server_packages }}"
+
     state: present
   tags: server
 
 - name: copy /etc/exports
   become: yes
-  template: src=exports.j2 dest=/etc/exports owner=root group=root
+  copy: 
+    src: exports.j2 
+    dest: /etc/exports 
+    owner: root 
+    group: root
+  tags: server
+
+- name: enable nfs server
+  service: 
+    name: nfs-server 
+    enabled: yes
   tags: server
 
 - name: restart nfs server
-  service: name=nfs-kernel-server state=restarted
+  service: 
+    name: nfs-server 
+    state: restarted
   tags: server

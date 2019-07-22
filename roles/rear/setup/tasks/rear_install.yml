@@ -13,8 +13,12 @@
 - name: check rear install
   command: /usr/sbin/rear -V
   register: rear_version
-  when: "rear_version.stat.exists"
-  changed_when: False
+  tags:
+    - install
+
+- debug:
+    msg: "Found ReaR..."
+  when: rear_version.stdout.find('Relax-and-Recover') == True
   tags:
     - install
 

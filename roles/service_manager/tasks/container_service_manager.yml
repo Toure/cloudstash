@@ -9,7 +9,7 @@
   docker_container: 
     name: "{{ items }}"
     state: stopped
-  with_items: "{{ container_services.stdout_lines }} "
+  with_items: "{{ container_services.stdout_lines }}"
   tags:
     - stop_services
   
@@ -17,6 +17,6 @@
   docker_container: 
     name: "{{ items }}"
     state: started
-    with_items: " {{ container_services.stdout_lines }} "
+    with_items: "{{ container_services.stdout_lines }}"
   tags:
     - start_services

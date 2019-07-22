@@ -28,9 +28,19 @@
     state: enabled
 
 - name: Create mountable dir
-  file: path={{ backup_mountpoint }} state=directory mode=777 owner=root group=root
+  file: 
+    path: "{{ backup_mountpoint }}"
+    state: directory 
+    mode: 755 
+    owner: root 
+    group: root
   tags: clients
 
 - name: set mountpoints
-  mount: name={{ backup_mountpoint }} src={{hostvars[groups['nfs_server'][0]]['ansible_eth0']['ipv4']['address']}}:/backups fstype=nfs opts=defaults,nobootwait dump=0 passno=2 state=mounted
+  mount: 
+    name: "{{ backup_mountpoint }}" 
+    src: "{{hostvars[groups['nfs_server'][0]]['ansible_eth0']['ipv4']['address']}}:/backups" 
+    fstype: nfs 
+    opts: defaults,nobootwait 
+    state: mounted
   tags: clients

@@ -2,6 +2,9 @@
 # Mount points for the server export and clients.
 backup_mountpoint: /system_backups
 
+# NFS drive path, example /dev/sdb1
+mountable_share_drive: 
+
 # Directory pathes for controller.
 backup_dirs:
   - /etc
@@ -35,8 +38,7 @@ backup_excludes:
 nfs_client:
   - controller_nodes
 
-nfs_server:
-  - undercloud
+nfs_server: 192.168.24.1 
 
 
 # Configure which service type structure is deployed on the overcloud nodes.
