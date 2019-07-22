@@ -24,7 +24,7 @@
 
 - name: copy rear local config
   become: yes
-  copy: 
+  template: 
     src: local.conf.j2 
     dest: /etc/rear/local.conf 
     owner: root 
