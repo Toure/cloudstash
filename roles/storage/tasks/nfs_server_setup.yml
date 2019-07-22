@@ -46,7 +46,7 @@
 
 - name: copy /etc/exports
   become: yes
-  copy: 
+  template: 
     src: exports.j2 
     dest: /etc/exports 
     owner: root 
