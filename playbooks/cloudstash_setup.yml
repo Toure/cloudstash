@@ -4,6 +4,7 @@
     - controller_nodes
     - undercloud
   gather_facts: true
+  become: yes
   tags:
     - install
   roles:
@@ -15,6 +16,7 @@
   hosts: 
     - nfs_server
   gather_facts: true
+  become: yes
   tags:
     - server
   roles:
@@ -24,6 +26,7 @@
   hosts: 
     - nfs_client
   gather_facts: true
+  become: yes
   tags:
     - client
   roles:
