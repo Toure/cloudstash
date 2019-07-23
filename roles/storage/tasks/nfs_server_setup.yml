@@ -7,7 +7,6 @@
     mode: 777 
     owner: root 
     group: root
-  tags: server
 
 - name: Packages for RHEL
   set_fact:
@@ -27,7 +26,6 @@
     name: "{{ nfs_server_packages }}"
 
     state: present
-  tags: server
 
 - name: copy /etc/exports
   become: yes
@@ -36,16 +34,13 @@
     dest: /etc/exports 
     owner: root 
     group: root
-  tags: server
 
 - name: enable nfs server
   service: 
     name: nfs-server 
     enabled: yes
-  tags: server
 
 - name: restart nfs server
   service: 
     name: nfs-server 
     state: restarted
-  tags: server
