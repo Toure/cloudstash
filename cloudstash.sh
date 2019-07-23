@@ -189,19 +189,19 @@ fi
 if [ "$OPT_INSTALL" = 1 ]; then
     echo "NOTICE: installing packages"
     OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
-    OPT_TAGS="install, server, clients"
+    OPT_TAGS="install,server,client"
 fi
 
 if [ "$OPT_BACKUP" = 1 ]; then
     echo "NOTICE: starting system backup"
     OPT_PLAYBOOK="playbooks/cloudstash_backup.yml"
-    OPT_TAGS="stop_services, db_backup, backup, start_services"
+    OPT_TAGS="stop_services,db_backup, backup,start_services"
 fi
 
 if [ "$OPT_RESCUE" = 1 ]; then
     echo "NOTICE: creating system rescue image."
     OPT_PLAYBOOK="playbooks/cloudstash_backup.yml"
-    OPT_TAGS="stop_services, db_backup, rescue, start_services"
+    OPT_TAGS="stop_services,db_backup,rescue,start_services"
 fi
 
 
