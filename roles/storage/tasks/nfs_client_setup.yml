@@ -19,7 +19,8 @@
   yum:
     name: "{{ nfs_client_packages }}"
     state: present
-  tags: clients
+  tags: 
+    - clients
 
 - name: Configure nfs client firewall port.
   firewalld:
@@ -34,7 +35,8 @@
     mode: 755 
     owner: root 
     group: root
-  tags: clients
+  tags: 
+    - clients
 
 - name: set mountpoints
   mount: 
@@ -43,4 +45,58 @@
     fstype: nfs 
     opts: defaults,nobootwait 
     state: mounted
-  tags: clients
+  tags: 
+    - clients
+
+- name: check mount point.
+  file:
+    path: "{{ backup_mountpoint }}/nfs_test"
+    state: touch
+  tags:
+    - clients
+
+- name: check mount point status
+  stat:
+    path: "{{ backup_mountpoint }}/nfs_test"
+  register: file_stat
+  tags:
+    - clients
+
+- debug:
+    msg: "NFS mount test passed."
+  when: file_stat.stat.exists == true
+  tags:
+    - clients
+
+- debug:
+    msg: "NFS mount failed."
+  when: file_stat.stat.exists == false
+  tags:
+    - clients
+
+- name: remove test file.
+  file:
+    path: "{{ backup_mountpoint }}/nfs_test"
+    state: absent
+  tags:
+    - clients
+
+- name: check removal state.
+  stat:
+    path: "{{ backup_mountpoint }}/nfs_test"
+  register: file_stat_rm
+  tags:
+    - clients
+
+- debug:
+    msg: "NFS test file clean up passed."
+  when: file_stat_rm.stat.exists == false
+  tags:
+    - clients
+
+- debug:
+    msg: "NFS test file clean up failed."
+  when: file_stat_rm.stat.exists == true
+  tags:
+    - clients
+
