@@ -45,7 +45,7 @@ Edit the inventory file: (with your favortie editor)
 [hypervisor_nodes]
 0.0.0.0  ansible_user=root
 
-[nfs_servers]
+[nfs_server]
 0.0.0.0
 ```
 

@@ -9,6 +9,6 @@
 #0.0.0.0  ansible_user=root
 #0.0.0.0  ansible_user=root
 
-[nfs_servers]
+[nfs_server]
 #0.0.0.0
 #0.0.0.0
