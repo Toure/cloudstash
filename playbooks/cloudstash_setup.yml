@@ -11,9 +11,20 @@
 
 # TODO: change the two plays to become a more generic interface.
 #
+- name: Get NFS Server IP
+  hosts:
+    - undercloud
+  gather_facts: false
+  tasks:
+    - set_fact:
+        nfs_server_ip: "{{ item }}"
+      when: "ipaddr('192.168.24.0/24')"
+      with_items: "{{ ansible_all_ipv4_addresses }}"
+    - debug: var=nfs_server_ip
+
 - name: NFS Server setup.
   hosts: 
-    - nfs_server
+    - nfs_server_ip
   become: yes
   roles:
     - storage/nfs_server
