@@ -18,7 +18,6 @@ LANG=C
 : ${OPT_INSTALL:=0}
 : ${OPT_BACKUP:=0}
 : ${OPT_RESCUE:=0}
-: ${OPT_VARS:=""}
 : ${OPT_TAGS:=""}
 : ${OPT_SKIP_TAGS:=""}
 : ${OPT_LIST_TASKS_ONLY=""}
@@ -95,8 +94,8 @@ usage () {
     echo ""
     echo "Advanced options:"
     echo ""
-    # echo "  -e, --extra-vars <key>=<value>"
-    # echo "                      additional ansible variables, can be used multiple times"
+    echo "  -e, --extra-vars <key>=<value>"
+    echo "                      additional ansible variables, can be used multiple times"
     echo "  -v, --ansible-debug"
     echo "                      invoke ansible-playbook with -vvvv"
     echo "  -t, --tags <tag1>[,<tag2>,...]"
@@ -151,11 +150,11 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        # --extra-vars|-e)
-        #     OPT_VARS+=("-e")
-        #     OPT_VARS+=("$2")
-        #     shift
-        #     ;;
+        --extra-vars|-e)
+            OPT_VARS+=("-e")
+            OPT_VARS+=("$2")
+            shift
+            ;;
 
         --help|-h)
             usage
@@ -184,10 +183,6 @@ print_logo
 echo "Install: $OPT_INSTALL"
 echo "Backup: $OPT_BACKUP"
 echo "RESCUE: $OPT_RESCUE"
-
-for opt in "$@"
-do
-    if 
 
 if [[ $OPT_INSTALL != 0 || \
       $OPT_BACKUP != 0 || \
@@ -222,7 +217,6 @@ if [ "$OPT_CLIENT" = 1 ]; then
     OPT_VARS="client_setup=\"1\""
 fi
 
-
 if [ "$OPT_INSTALL" = 1 ]; then
     echo "NOTICE: installing packages"
     OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
@@ -247,5 +241,7 @@ ansible-playbook -$VERBOSITY $OPT_PLAYBOOK \
     ${OPT_LIST_TASKS_ONLY} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
     ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS} \
-    ${OPT_VARS}\
+    ${OPT_VARS[@]}\
     ${OPT_NODES}
+
+set +x
