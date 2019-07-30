@@ -2,4 +2,4 @@
 # Tasks responsible for configuring the nfs server.
 - name: NFS Sever Setup
   include_tasks: nfs_server_setup.yml
-  when: server_setup == 1
+  when: server_setup == "1"

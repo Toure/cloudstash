@@ -5,8 +5,7 @@
     - controllers
   roles:
     - role: service_manager
-      vars: { service_type: "{{ service_type }}" } 
-      tags: stop_services
+  tags: stop_services
 
 - name: Backup databases on controller nodes.
   hosts: controller_nodes
@@ -19,18 +18,18 @@
 - name: Start System Backup
   hosts:
     - controllers
-    - undercloud
+    # - undercloud
   roles:
-  - { role: rear/backup, vars: { backup: "backup" } }
+  - rear/backup
   tags:
     - backup
 
 - name: Start System Rescue
   hosts:
     - controllers
-    - undercloud
+    # - undercloud
   roles:
-  - { role: rear/backup, vars: { rescue: "rescue" } }
+  - rear/backup
   tags:
     - rescue
 
@@ -39,5 +38,4 @@
     - controllers
   roles:
     - role: service_manager
-      vars: { service_type: "{{ service_type }}" }
-      tags: start_services
+  tags: start_services

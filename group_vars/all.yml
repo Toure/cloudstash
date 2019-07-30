@@ -55,3 +55,10 @@ nfs_server:
 # service_type = standard (classic systemd)
 # service_type = containerized (container based services)
 service_type: containerized
+
+# Backup Databases
+# choose between mysql or redis or both.
+# enable = 1 (default)
+# disable = 0
+backup_mysql: 1
+backup_redis: 1

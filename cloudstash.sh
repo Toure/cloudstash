@@ -220,7 +220,7 @@ fi
 if [ "$OPT_INSTALL" = 1 ]; then
     echo "NOTICE: installing packages"
     OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
-    OPT_TAGS="install,server,client"
+    OPT_TAGS="install"
 fi
 
 if [ "$OPT_BACKUP" = 1 ]; then
