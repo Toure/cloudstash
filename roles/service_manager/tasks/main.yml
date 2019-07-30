@@ -1,7 +1,7 @@
 ---
 
 - include_tasks: service_manager.yml
-  when: service_type is "standard"
+  when: service_type == "standard"
 
 - include_tasks: container_service_manager.yml
-  when: service_type is "containerized"
+  when: service_type == "containerized"
