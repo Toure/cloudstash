@@ -1,5 +1,2 @@
 ---
 # tasks file for storage
-- include_tasks: nfs_client_setup.yml
-
-- include_tasks: nfs_server_setup.yml

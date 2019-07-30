@@ -13,9 +13,12 @@ exec &> >(tee -i -a _cloudstash.log)
 LANG=C
 
 : ${OPT_PLAYBOOK:=""}
+: ${OPT_SERVER:=0}
+: ${OPT_CLIENT:=0}
 : ${OPT_INSTALL:=0}
 : ${OPT_BACKUP:=0}
 : ${OPT_RESCUE:=0}
+: ${OPT_VARS:=""}
 : ${OPT_TAGS:=""}
 : ${OPT_SKIP_TAGS:=""}
 : ${OPT_LIST_TASKS_ONLY=""}
@@ -78,6 +81,10 @@ usage () {
     echo ""
     echo "  -i, --install       install cloudstash packages dependencies and exit"
     echo ""
+    echo "  -s, --server_config install nfs packages and configures the nfs server"
+    echo ""
+    echo "  -c, --client_config install nfs packages and configures the nfs client"
+    echo ""
     echo "  -b, --backup        execute the backup operation on nodes which are provided on the"
     echo "                      command line which -N flag or configured in the inventory file."
     echo ""
@@ -109,8 +116,16 @@ while [ "x$1" != "x" ]; do
             OPT_INSTALL=1
             ;;
 
+        --server_config|-s)
+            OPT_SERVER=1
+            ;;
+
+        --client_config|-c)
+            OPT_CLIENT=1
+            ;;
+
         --backup|-b)
-            OPT_SYSTEM_PACKAGES=1
+            OPT_BACKUP=1
             ;;
 
         --rescue|-r)
@@ -170,7 +185,15 @@ echo "Install: $OPT_INSTALL"
 echo "Backup: $OPT_BACKUP"
 echo "RESCUE: $OPT_RESCUE"
 
-if [[ $OPT_INSTALL != 0 || $OPT_BACKUP != 0 || $OPT_RESCUE != 0 ]]; then
+for opt in "$@"
+do
+    if 
+
+if [[ $OPT_INSTALL != 0 || \
+      $OPT_BACKUP != 0 || \
+      $OPT_RESCUE != 0 || \
+      $OPT_SERVER !=0 || \
+      $OPT_CLIENT !0 ]]; then
     echo "Starting Cloudstash"
 else
     echo ""
@@ -185,6 +208,20 @@ if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
 else
     VERBOSITY=vv
 fi
+
+if [ "$OPT_SERVER" = 1 ]; then
+    echo "NOTICE: Configuring NFS Server"
+    OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
+    OPT_TAGS="server"
+fi
+
+if [ "$OPT_CLIENT" = 1 ]; then
+    echo "NOTICE: Configuring NFS Client"
+    OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
+    OPT_TAGS="client"
+    OPT_VARS="client_setup=\"1\""
+fi
+
 
 if [ "$OPT_INSTALL" = 1 ]; then
     echo "NOTICE: installing packages"
@@ -210,5 +247,5 @@ ansible-playbook -$VERBOSITY $OPT_PLAYBOOK \
     ${OPT_LIST_TASKS_ONLY} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
     ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS} \
-    # ${OPT_VARS}\
+    ${OPT_VARS}\
     ${OPT_NODES}

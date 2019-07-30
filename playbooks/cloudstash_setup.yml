@@ -3,7 +3,6 @@
   hosts:
     - controller_nodes
     - undercloud
-  gather_facts: true
   become: yes
   tags:
     - install
@@ -11,23 +10,20 @@
     - rear/setup
 
 # TODO: change the two plays to become a more generic interface.
-# 
+#
 - name: NFS Server setup.
   hosts: 
     - nfs_server
-  gather_facts: true
   become: yes
-  tags:
-    - server
   roles:
-    - storage
+    - storage/nfs_server
+  tags: server
 
 - name: NFS Client setup.
   hosts: 
     - nfs_client
-  gather_facts: true
   become: yes
+  roles:
+    - storage/nfs_client
   tags:
     - client
-  roles:
-    - storage

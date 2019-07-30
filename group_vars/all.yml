@@ -33,6 +33,10 @@ backup_excludes:
   - /dev
   - /run
 
+# Setup NFS Server and client
+server_setup: 0
+client_setup: 0
+
 # Adjust the name here to reflect the name in the inventory / hosts file.
 # Or specify address information here. 
 # -- example -- 
@@ -42,7 +46,8 @@ backup_excludes:
 nfs_client:
   - controller_nodes
 
-nfs_server: 192.168.24.1 
+nfs_server: 
+  - undercloud
 
 
 # Configure which service type structure is deployed on the overcloud nodes.
