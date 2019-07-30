@@ -54,6 +54,16 @@ Edit the inventory file: (with your favortie editor)
 $ bash cloudstash.sh --install
 ```
 
+### Configure NFS Server on defined server node:
+```sh
+$ bash cloudstash.sh -s -e "server_setup=1"
+```
+
+### Configure NFS Clients:
+```sh
+$ bash cloudstash.sh -c -e "client_setup=1"
+``` 
+
 ### Perform the first systems backup:
 ```sh
 $ bash cloudstash.sh --backup
