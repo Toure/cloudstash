@@ -187,8 +187,8 @@ echo "RESCUE: $OPT_RESCUE"
 if [[ $OPT_INSTALL != 0 || \
       $OPT_BACKUP != 0 || \
       $OPT_RESCUE != 0 || \
-      $OPT_SERVER !=0 || \
-      $OPT_CLIENT !0 ]]; then
+      $OPT_SERVER != 0 || \
+      $OPT_CLIENT != 0 ]]; then
     echo "Starting Cloudstash"
 else
     echo ""
