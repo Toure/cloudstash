@@ -1,6 +1,5 @@
 ---
 # Task responsible for configuring nfs clients.
-
 - name: NFS Client Setup
   include_tasks: nfs_client_setup.yml
   when: client_setup == "1"
