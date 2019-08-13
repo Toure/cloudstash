@@ -1,6 +1,6 @@
 ---
 # Mount points for the server export and clients.
-backup_mountpoint: system_backups
+backup_mountpoint: /system_backups
 
 # NFS drive path, example /dev/sdb1
 mountable_share_drive: 
@@ -47,8 +47,9 @@ client_setup: 0
 # nfs_client:
 #   - 192.168.1.2
 # 
-nfs_client:
-  - controller_nodes
+nfs_client: "{{ controller_nodes }}"
+
+nfs_server_ip: "{{ nfs_server }}"
 
 
 # Configure which service type structure is deployed on the overcloud nodes.

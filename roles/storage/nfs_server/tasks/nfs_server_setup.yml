@@ -24,8 +24,15 @@
 - name: Ensure NFS utilities are installed.
   yum: 
     name: "{{ nfs_server_packages }}"
-
     state: present
+
+- iptables_raw:
+    name: allow_tcp_2049
+    rules: '-A INPUT -s {{ overcloud_net }} -m state --state NEW -p tcp --dport 2049 -j ACCEPT'
+
+- iptables_raw:
+    name: allow_tcp_111
+    rules: '-A INPUT -s {{ overcloud_net }} -m state --state NEW -p tcp --dport 111 -j ACCEPT'
 
 - name: copy /etc/exports
   become: yes

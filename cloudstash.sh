@@ -214,7 +214,6 @@ if [ "$OPT_CLIENT" = 1 ]; then
     echo "NOTICE: Configuring NFS Client"
     OPT_PLAYBOOK="playbooks/cloudstash_setup.yml"
     OPT_TAGS="client"
-    OPT_VARS="client_setup=\"1\""
 fi
 
 if [ "$OPT_INSTALL" = 1 ]; then
@@ -243,5 +242,3 @@ ansible-playbook -$VERBOSITY $OPT_PLAYBOOK \
     ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS} \
     ${OPT_VARS[@]}\
     ${OPT_NODES}
-
-set +x

@@ -48,6 +48,8 @@ Edit the inventory file: (with your favortie editor)
 [nfs_server]
 0.0.0.0
 ```
+**nfs_server ip should correspond with the network which is addressable
+by the controller nodes.
 
 ### Install packages on all nodes:
 ```sh
