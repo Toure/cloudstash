@@ -49,7 +49,7 @@ client_setup: 0
 # 
 nfs_client: "{{ controller_nodes }}"
 
-nfs_server_ip: "{{ nfs_server }}"
+nfs_server_ip: 192.168.24.0 # change this to reflect your network.
 
 
 # Configure which service type structure is deployed on the overcloud nodes.
