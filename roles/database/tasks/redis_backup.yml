@@ -27,6 +27,6 @@
 - name: Copy the Redis dump
   copy:
     src: /var/lib/redis/dump.rdb
-    dest: "{{ backup_tmp_dir }}/redis/dump.rdb"
+    dest: "{{ backup_mountpoint }}/redis/dump.rdb"
     remote_src: yes
   become: true

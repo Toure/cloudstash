@@ -24,7 +24,7 @@
       mysql_db:
         state: dump
         name: "{{ item }}"
-        target: "/tmp/{{ item }}.sql.gzip"
+        target: "{{ backup_mountpoint }}/mysql/{{ item }}.sql.gzip"
         login_user: root
         login_password: "{{ mysql_password }}"
       with_items: "{{ dblist.stdout_lines | difference(exclude_db) }}"

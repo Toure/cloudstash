@@ -4,7 +4,7 @@
   file: 
     path: "{{ backup_mountpoint }}"
     state: directory 
-    mode: 777 
+    mode: 755 
     owner: root 
     group: root
 
