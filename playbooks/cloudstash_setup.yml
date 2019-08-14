@@ -13,7 +13,7 @@
 # TODO: change the two plays to become a more generic interface.
 #
 - name: NFS Server setup.
-  hosts: {{ nfs_server }}
+  hosts: nfs_server 
   gather_facts: false
   become: yes
   roles:
@@ -22,8 +22,7 @@
 
 - name: NFS Client setup.
   gather_facts: false
-  hosts: 
-    - nfs_client
+  hosts: nfs_client
   become: yes
   roles:
     - storage/nfs_client
