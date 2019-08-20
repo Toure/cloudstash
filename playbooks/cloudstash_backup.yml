@@ -8,7 +8,7 @@
   tags: stop_services
 
 - name: Backup databases on controller nodes.
-  hosts: controller_nodes
+  hosts: endpoint_nodes
   gather_facts: true
   roles:
     - database

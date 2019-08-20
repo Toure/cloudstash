@@ -35,7 +35,7 @@ Edit the inventory file: (with your favortie editor)
 ### Example Content:
 
 ```
-[controller_nodes]
+[endpoint_nodes]
 0.0.0.0  ansible_user=heat-admin
 0.0.0.0  ansible_user=heat-admin
 

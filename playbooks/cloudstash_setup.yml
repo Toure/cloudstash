@@ -1,8 +1,8 @@
 ---
 - name: Install ReaR packages
   hosts:
-    - controller_nodes
-    - undercloud
+    - endpoint_nodes
+    # - undercloud
   gather_facts: true
   become: yes
   tags:
