@@ -35,12 +35,12 @@
     rules: '-A INPUT -s {{ overcloud_net }} -m state --state NEW -p tcp --dport 111 -j ACCEPT'
 
 - name: copy /etc/exports
-  become: yes
   template: 
-    src: exports.j2 
+    src: templates/exports.j2 
     dest: /etc/exports 
     owner: root 
     group: root
+    mode: 644
 
 - name: enable nfs server
   service: 

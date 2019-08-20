@@ -3,7 +3,7 @@
   hosts:
     - controller_nodes
     - undercloud
-  gather_facts: false
+  gather_facts: true
   become: yes
   tags:
     - install
