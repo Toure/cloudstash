@@ -14,14 +14,12 @@
 #
 - name: NFS Server setup.
   hosts: nfs_server 
-  gather_facts: false
   become: yes
   roles:
     - storage/nfs_server
   tags: server
 
 - name: NFS Client setup.
-  gather_facts: false
   hosts: nfs_client
   become: yes
   roles:
