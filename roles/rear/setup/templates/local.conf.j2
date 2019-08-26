@@ -3,6 +3,6 @@ OUTPUT=ISO
 OUTPUT_URL=nfs://{{ nfs_server }}{{ backup_mountpoint }}
 BACKUP=NETFS
 BACKUP_URL=nfs://{{ nfs_server }}{{ backup_mountpoint }}
-BACKUP_PROG_EXCLUDE=({{ backup_excludes.stdout_lines | to_yaml }} '/media' '/var/tmp' '/var/crash')
+BACKUP_PROG_EXCLUDE=({{ backup_excludes | to_yaml }} '/media' '/var/tmp' '/var/crash')
 BOOTLOADER={{ bootloader }}
 GRUB_RESCUE=1
