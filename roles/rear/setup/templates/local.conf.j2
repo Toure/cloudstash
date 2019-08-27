@@ -1,8 +1,8 @@
 ISO_PREFIX={{ ansible_hostname }}
 OUTPUT=ISO
-OUTPUT_URL=nfs://{{ nfs_server }}{{ backup_mountpoint }}
+OUTPUT_URL=nfs://{{ hostvars.nfs_server }}{{ backup_mountpoint }}
 BACKUP=NETFS
-BACKUP_URL=nfs://{{ nfs_server }}{{ backup_mountpoint }}
+BACKUP_URL=nfs://{{ hostvars.nfs_server }}{{ backup_mountpoint }}
 BACKUP_PROG_EXCLUDE=({{ backup_excludes | to_yaml }} '/media' '/var/tmp' '/var/crash')
 BOOTLOADER={{ bootloader }}
 GRUB_RESCUE=1
